@@ -1,0 +1,14 @@
+{
+    "name": "pokelord",
+    "version": "1.0.0",
+    "description": "A Discord Bot that allows you to catch pokémon, trade pokémon, and sell/buy Pokémon!",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "canvas": "^2.6.1",
+      "discord.js": "12.2.0"
+    }
+  }
+  

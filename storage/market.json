@@ -1,0 +1,168 @@
+{
+    "id": 12,
+    "server": [
+        null,
+        null,
+        null,
+        {
+            "number": 4,
+            "dex_num": 585,
+            "type": [
+                "Normal",
+                ""
+            ],
+            "name": "Arceus",
+            "level": 22,
+            "xp": 1,
+            "tiv": "20.43",
+            "price": 1e+109,
+            "iv": [
+                6,
+                4,
+                6,
+                8,
+                10,
+                4
+            ],
+            "seller": "717880107662049321"
+        },
+        {
+            "number": 5,
+            "dex_num": 458,
+            "type": [
+                "Dragon",
+                "",
+                "Flying"
+            ],
+            "name": "Rayquaza",
+            "level": 15,
+            "xp": 1,
+            "tiv": "38.71",
+            "price": 1e+91,
+            "iv": [
+                2,
+                7,
+                8,
+                10,
+                24,
+                21
+            ],
+            "seller": "717880107662049321"
+        },
+        {
+            "number": 6,
+            "dex_num": 146,
+            "type": [
+                "Normal",
+                ""
+            ],
+            "name": "Chansey",
+            "level": 16,
+            "xp": 1,
+            "tiv": "32.80",
+            "price": 1e+55,
+            "iv": [
+                8,
+                5,
+                9,
+                3,
+                28,
+                8
+            ],
+            "seller": "715739490055880754"
+        },
+        null,
+        {
+            "number": 8,
+            "dex_num": 584,
+            "type": [
+                "Grass",
+                "",
+                "Flying"
+            ],
+            "name": "Shaymin Sky Form",
+            "level": 1,
+            "xp": 1,
+            "tiv": "19.89",
+            "price": 1.1111111111111111e+82,
+            "iv": [
+                9,
+                11,
+                3,
+                8,
+                5,
+                1
+            ],
+            "seller": "612360028854288577"
+        },
+        {
+            "number": 9,
+            "dex_num": 223,
+            "type": [
+                "Electric",
+                "",
+                "Dragon"
+            ],
+            "name": "Mega Ampharos",
+            "level": 41,
+            "xp": 1,
+            "tiv": "34.95",
+            "price": 1e+110,
+            "iv": [
+                0,
+                3,
+                21,
+                6,
+                31,
+                4
+            ],
+            "seller": "717880107662049321"
+        },
+        {
+            "number": 10,
+            "dex_num": 658,
+            "type": [
+                "Dark",
+                "",
+                "Fighting"
+            ],
+            "name": "Scrafty",
+            "level": 24,
+            "xp": 1,
+            "tiv": "59.14",
+            "price": null,
+            "iv": [
+                29,
+                20,
+                2,
+                15,
+                14,
+                30
+            ],
+            "seller": "717880107662049321"
+        },
+        {
+            "number": 11,
+            "dex_num": 303,
+            "type": [
+                "Grass",
+                "",
+                "Dragon"
+            ],
+            "name": "Mega Sceptile",
+            "level": 38,
+            "xp": 1,
+            "tiv": "29.03",
+            "price": null,
+            "iv": [
+                16,
+                0,
+                15,
+                13,
+                3,
+                7
+            ],
+            "seller": "717880107662049321"
+        }
+    ]
+}
