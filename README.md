@@ -1,7 +1,7 @@
 # PokeLord
 
 ## Credit
-* Xenophloxic -> Help and Shop commands
+* Xenophloxic -> Help, Shop, and extra commands
 * Dongliu0426 -> Pokemon, Trade, and Market commands
 * CrazyRebel2007 -> Server and Botinfo
 
