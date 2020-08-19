@@ -2,7 +2,7 @@
 
 ## Credit
 * Xenophloxic -> Help, Shop, and extra commands
-* Dongliu0426 -> Pokemon, Trade, and Market commands
+* Dongliu0426 -> Ping, Botinfo, Info, Redeem, Pokemon, Trade, and Market commands
 * CrazyRebel2007 -> Server and Botinfo
 
 ## Artists (for images)
