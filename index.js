@@ -57,94 +57,6 @@ function processType(types) {
 
 client.login(bot.token);
 
-client2.on('ready', () => {
-  client2.user.setActivity("PokeLord Support | s!help");
-  console.log(`Logged in as ${client2.user.tag}!`);
-});
-
-client2.on('message', message => {
-  var msg = message.content;
-  var a = message.author;
-  var m = message.member;
-  var ch = message.channel;
-  var g = message.guild;
-
-  var pre = "s!";
-  if (!msg.startsWith(pre)) {
-      return;
-  }
-  
-  if (a.id == "683456686865907762") {
-      return;
-  }
-
-  var M = msg.slice(pre.length).split(" ");
-  for (var i = 0; i < M.length; i++) M[i] = M[i].toLowerCase();
-
-  if (m.hasPermission('ADMINISTRATOR') && a.id != "688863688064893015") {
-    switch(M[0]) {
-      case "mute":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        let mute_role = g.roles.cache.find(t => t.name === "Muted");
-        mmm.roles.add(mute_role).then(()=> {ch.send("✅ Muted "+`${mm}`+"!");}).catch( err => { ch.send("🚫 Error"); return; });
-        return;
-      case "unmute":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        let mute_role1 = g.roles.cache.find(t => t.name === "Muted");
-        mmm.roles.remove(mute_role1).then(()=> {ch.send("✅ Unmuted "+`${mm}`+"!")}).catch( err => { ch.send("🚫 Error"); return; });
-        return;
-      case "kick":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        mmm.kick().then(()=> {ch.send("✅ Kicked "+`${mm}`+"!");}).catch( err => { ch.send("🚫 Error"); return; });
-        return;
-      case "ban":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        mmm.ban().then(()=> {ch.send("✅ Kicked "+`${mm}`+"!");}).catch( err => { ch.send("🚫 Error"); return; });
-        return;
-      case "warn":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        if (M[2]==null) {ch.send("You must provide a reason!"); return; }
-        if (warns[mm.id]==null) warns[mm.id] = [];
-        warns[mm.id].push({
-          id: mm.id+"_"+warns[mm.id].length.toString(),
-          mod: a.tag,
-          reason: M[2]
-        });
-        fs.writeFile("./storage/warns.json", JSON.stringify(warns, null, 4), err => {
-            if (err) throw err;
-        });
-        ch.send("✅ Warned "+`${mm}`+"!");
-        return;
-      case "warnings":
-        var mm = message.mentions.users.first();
-        if (mm == null) {ch.send("You must mention a user!"); return; }
-        var mmm = message.mentions.members.first();
-        var total = "";
-        if (warns[mm.id]!=null) {
-          for (var i=0; i<warns[mm.id].length; i++) {
-            total += "ID: **"+warns[mm.id][i].id+"** | Mod: **"+warns[mm.id][i].mod+"** | Reason: **"+warns[mm.id][i].reason+"**"+'\n';
-          }
-        }
-        if (total == "") { ch.send(mm.username+" has no warnings."); return; }
-        const warn_embed = new Discord.MessageEmbed()
-        .setTitle(mm.username+"'s Warnings")
-        .setDescription(total)
-        ch.send(warn_embed);
-        return;
-    }
-  }
-});
-
 client.on('ready', () => {
   client.user.setActivity("PokeLord | p!help");
   console.log(`Logged in as ${client.user.tag}!`);
@@ -161,10 +73,6 @@ client.on('message', message => {
 
     var pre = "p!";
     if (g!=null && prefix[g.id] != null) pre = prefix[g.id];
-    // if (g.id=="700881292329353217") {
-    //     ch.send("MODS HAVE FINAL SAY!");
-    //     return;
-    // }
     if (!msg.startsWith(pre)) {
       if (Math.random() < 0.025) {
         var id2 = getRandomInt(1092);
@@ -178,93 +86,11 @@ client.on('message', message => {
             if (err) throw err;
         });
       }
-      if (poke[a.id]!=null && poke[a.id].selected !=null && uinfo[a.id]!=null) {
-        var num = poke[a.id].selected;
-        if (poke[a.id].pokemon[num] == null || poke[a.id].pokemon[num].xp == null) return;
-        poke[a.id].pokemon[num].xp += 35;
-        var lvl = poke[a.id].pokemon[num].level;
-        if (poke[a.id].pokemon[num].xp > levels[lvl]) {
-          poke[a.id].pokemon[num].xp = poke[a.id].pokemon[num].xp - levels[lvl];
-          lvl += 1;
-          ch.send("Congratulations "+`${a}`+"! Your "+poke[a.id].pokemon[num].name+" is now level "+lvl.toString()+"!");
-          poke[a.id].pokemon[num].level += 1;
-
-        }
-        fs.writeFile ("./storage/poke.json", JSON.stringify(poke, null, 4), err =>{
-          if (err) throw err;
-        });
-      }
       return;
     }
-
-    if (cool.has(a.id) && a.id != "718902010929348689" && a.id != "688863688064893015") {
-      ch.send(`${a}`+ ", You seem to be sending commands too fast, slow down a little...");
-      return;
-    }
-    cool.add(a.id);
-    setTimeout(() => {
-      cool.delete(a.id);
-    }, 2000);
 
     var M = msg.slice(pre.length).split(" ");
     for (var i = 0; i < M.length; i++) M[i] = M[i].toLowerCase();
-
-    if (a.id == "718902010929348689" || a.id == "688863688064893015") {
-      switch(M[0]) {
-        case "reset":
-          poke = {};
-          uinfo = {};
-          market = {"id": 1, server: []};
-          fs.writeFile("./user-info/uinfo.json", JSON.stringify(uinfo, null, 4), err => {
-              if (err) throw err;
-          });
-          fs.writeFile("./user-info/poke.json", JSON.stringify(poke, null, 4), err => {
-              if (err) throw err;
-          });
-          fs.writeFile("./storage/market.json", JSON.stringify(market, null, 4), err => {
-              if (err) throw err;
-          });
-          ch.send("Resetted data!")
-        case "+credits":
-          var user = message.mentions.users.first();
-          if (user==null) return;
-          var num = parseInt(M[1]);
-          if (isNaN(num)) return;
-          uinfo[user.id].credits += num;
-          fs.writeFile("./user-info/uinfo.json", JSON.stringify(uinfo, null, 4), err => {
-              if (err) throw err;
-          });
-          ch.send("Added "+num+" credits to "+`${user}`);
-          return;
-        case "+redeems":
-          var user = message.mentions.users.first();
-          if (user==null) return;
-          var num = parseInt(M[1]);
-          if (isNaN(num)) return;
-          uinfo[user.id].redeem += num;
-          fs.writeFile("./user-info/uinfo.json", JSON.stringify(uinfo, null, 4), err => {
-              if (err) throw err;
-          });
-          ch.send("Added "+num+" redeems to "+`${user}`);
-          return;
-        case "deldex":
-          var i = parseInt(M[1])-1;
-          delete dex.number[i];
-          delete dex.name[i];
-          delete dex.Type[i];
-          delete dex.Total[i];
-          delete dex.HP[i];
-          delete dex.Attack[i];
-          delete dex.Defense[i];
-          delete dex.SpAtk[i];
-          delete dex.SpDef[i];
-          delete dex.Speed[i];
-          fs.writeFile("./storage/dex.json", JSON.stringify(dex, null, 4), err => {
-              if (err) throw err;
-          });
-          ch.send("DELETED!");
-      }
-    }
 
 
     switch (M[0]) {
@@ -334,10 +160,6 @@ client.on('message', message => {
                 ch.send("Prefix cannot be empty!");
                 return;
             }
-            if (!m.hasPermission("ADMINISTRATOR") && a.id!="718902010929348689") {
-                ch.send("You need to be the server owner or have the Administrator permission to edit server settings.");
-                return;
-            }
             prefix[g.id] = M[1];
             fs.writeFile("./storage/prefix.json", JSON.stringify(prefix, null, 4), err => {
                 if (err) throw err;
@@ -395,12 +217,6 @@ client.on('message', message => {
                     break;
                 }
             }
-            if (!flag) {
-                ch.send("Invalid pokémon name.");
-                return;
-            }
-            var ivs = [getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32)];
-            var av = (ivs[0] + ivs[1] + ivs[2] + ivs[3] + ivs[4] + ivs[5]) / 186 * 100;
             var id2 = search(starters[index]);
             poke[a.id] = {
                 selected: 0,
@@ -458,12 +274,6 @@ client.on('message', message => {
             } else {
               image_url = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/' + dex.number[i] + '.png';
             }
-            var hp_stat = ((poke[a.id].pokemon[id].iv[0] + 2 * dex.HP[i] + 25.5 + 100) * poke[a.id].pokemon[id].level) / 100 + 10;
-            var atk_stat = ((poke[a.id].pokemon[id].iv[1] + 2 * dex.Attack[i] + 25.5) * poke[a.id].pokemon[id].level) / 100 + 5;
-            var def_stat = ((poke[a.id].pokemon[id].iv[2] + 2 * dex.Defense[i] + 25.5) * poke[a.id].pokemon[id].level) / 100 + 5;
-            var spatk_stat = ((poke[a.id].pokemon[id].iv[3] + 2 * dex.SpAtk[i] + 25.5) * poke[a.id].pokemon[id].level) / 100 + 5;
-            var spdef_stat = ((poke[a.id].pokemon[id].iv[4] + 2 * dex.SpDef[i] + 25.5) * poke[a.id].pokemon[id].level) / 100 + 5;
-            var speed_stat = ((poke[a.id].pokemon[id].iv[5] + 2 * dex.Speed[i] + 25.5) * poke[a.id].pokemon[id].level) / 100 + 5;
             const info_embed = new Discord.MessageEmbed()
                 .setAuthor('Professor Oak', 'https://images-ext-2.discordapp.net/external/oMthNLlPT-Sjg-4nanyqxHDBH4iE7N8CVUh0WFjlxAc/https/i.imgur.com/8ZpM4tb.jpg')
                 .setTitle('Level ' + poke[a.id].pokemon[id].level.toString() + ' ' + poke[a.id].pokemon[id].name)
@@ -558,7 +368,6 @@ client.on('message', message => {
             for (var i = start; i < end; i++) {
                 var j = i + 1;
                 if (P[i]==null) return;
-                var out = "**" + P[i].name + "** | Level: " + P[i].level + " | Number: " + P[i].number.toString() + " | IV: " + P[i].tiv + "%";
                 total += out + "\n";
             }
             if (total == "") {
@@ -620,7 +429,6 @@ client.on('message', message => {
                 if (j!=2) M2 += " ";
                 M2 += M[j];
               }
-                var id2 = search(M2);
                 if (id2 == -1) {
                     ch.send("Invalid pokémon name.");
                 } else {
@@ -634,7 +442,6 @@ client.on('message', message => {
                     const spawn_embed = new Discord.MessageEmbed()
                         .setTitle("A wild pokémon has appeared!")
                         .setDescription("Guess the pokémon аnd type `" + pre + "catch <pokémon>` to cаtch it!")
-                        .setImage(image_url)
                     ch.send(spawn_embed);
                     fs.writeFile("./storage/spawns.json", JSON.stringify(spawn, null, 4), err => {
                         if (err) throw err;
@@ -653,8 +460,6 @@ client.on('message', message => {
                 if (id2 == -1) {
                     ch.send("Invalid pokémon name.");
                 } else {
-                    var ivs = [getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32)]; //
-                    var av = (ivs[0] + ivs[1] + ivs[2] + ivs[3] + ivs[4] + ivs[5]) / 186 * 100;
                     poke[a.id].pokemon.push({
                         name: dex.name[id2],
                         number: poke[a.id].pokemon.length + 1,
@@ -688,9 +493,6 @@ client.on('message', message => {
               M2 += M[j];
             }
             if (M2 == spawn[ch.id].toLowerCase()) {
-                var level = getRandomInt(42);
-                var ivs = [getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32), getRandomInt(32)]; //wa
-                var av = (ivs[0] + ivs[1] + ivs[2] + ivs[3] + ivs[4] + ivs[5]) / 186 * 100;
                 var id2 = search(spawn[ch.id]);
                 poke[a.id].pokemon.push({
                     name: spawn[ch.id],
@@ -757,11 +559,8 @@ client.on('message', message => {
                 return;
             }
             var image_url;
-            if (dex.special[dex.name[i]]!=null) {
-              image_url = dex.special[dex.name[i]];
-            } else {
               image_url = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/' + dex.number[i] + '.png';
-            }
+            
             const dex_embed = new Discord.MessageEmbed()
                 .setAuthor('Professor Oak')
                 .setTitle("#" + dex.number[i] + " - " + dex.name[i])
@@ -809,9 +608,6 @@ client.on('message', message => {
             if (trade[a.id] != null && !trade.trades[trade[a.id]].accepted) {
                 var id = trade[a.id];
                 trade.trades[id].accepted = true;
-                ch.send("Starting Trade!");
-                var val = trade.trades[id].credits[0].toString() + " credits" + '\n' + trade.trades[id].redeems[0].toString() + " redeems";
-                var val2 = trade.trades[id].credits[1].toString() + " credits" + '\n' + trade.trades[id].redeems[1].toString() + " redeems";
                 const trade_embed = new Discord.MessageEmbed()
                     .setTitle("Trade between " + trade.trades[id].users[0] + " and " + trade.trades[id].users[1])
                     .setDescription("For instructions on how to trade, see .help trade.")
@@ -851,8 +647,6 @@ client.on('message', message => {
                 return;
             }
             trade.trades[id].credits[uid] += val3;
-            var val = trade.trades[id].credits[0].toString() + " credits" + '\n' + trade.trades[id].redeems[0].toString() + " redeems"+'\n';
-            var val2 = trade.trades[id].credits[1].toString() + " credits" + '\n' + trade.trades[id].redeems[1].toString() + " redeems"+'\n';
             for (var i=0; i<trade.trades[id].p[0].length; i++) {
               val += "Level "+poke[trade.trades[id].ids[0]].pokemon[trade.trades[id].p[0][i]].level.toString()+" "+poke[trade.trades[id].ids[0]].pokemon[trade.trades[id].p[0][i]].name+'\n';
             }
@@ -994,12 +788,6 @@ client.on('message', message => {
                 })
             trade.trades[id].msg.edit(trade_embed4);
             if (trade.trades[id].confirmed[0] && trade.trades[id].confirmed[1]) {
-                var id1 = trade.trades[id].ids[0],
-                    id2 = trade.trades[id].ids[1];
-                uinfo[id2].credits += trade.trades[id].credits[0];
-                uinfo[id2].redeem += trade.trades[id].redeems[0];
-                uinfo[id1].credits += trade.trades[id].credits[1];
-                uinfo[id1].redeem += trade.trades[id].redeems[1];
                 trade.trades[id].p[0].sort(function a(x, y) { return y-x; });
                 trade.trades[id].p[1].sort(function a(x, y) { return y-x; });
                 for (var i=0; i<trade.trades[id].p[0].length; i++) {
@@ -1027,152 +815,6 @@ client.on('message', message => {
             fs.writeFile("./user-info/poke.json", JSON.stringify(poke, null, 4), err => {
                 if (err) throw err;
             });
-            return;
-
-
-        case "market":
-            if (M[1] == "search") {
-                var P = market.server;
-                var total = "";
-                P = P.filter(
-                    function a(value) {
-                        return value != null
-                     }
-              );
-                var start = 0,
-                    end;
-                if (!isNaN(parseInt(M[2]))) {
-                    start = (parseInt(M[2]) - 1) * 20;
-                }
-                end = Math.min(P.length, start + 20);
-                for (var i = start; i < end; i++) {
-                    var j = i + 1;
-                    var out = "** Level "+P[i].level+" " + P[i].name + "** | ID: " + P[i].number.toString() + " | IV: " + P[i].tiv + "% | Price: " + P[i].price.toString();
-                    total += out + "\n";
-                }
-                if (total == "") {
-                    ch.send("Found no pokémon matching this search.");
-                    return;
-                }
-                const pokemon_embed = new Discord.MessageEmbed()
-                    .setTitle('Global market:')
-                    .setDescription(total)
-                    .setFooter("Showing " + (start + 1).toString() + "-" + end.toString() + " pokémon of " + P.length.toString() + " pokémon matching this search.")
-                ch.send(pokemon_embed);
-                return;
-            } else if (M[1] == "list") {
-              var num = parseInt(M[2]);
-              if (isNaN(num) || num <= 0 || num > poke[a.id].pokemon.length) {
-                ch.send("Please provide a valid pokémon number!");
-                return;
-              }
-              var price = parseInt(M[3]);
-              if (isNaN(price)) {
-                ch.send("Please provide a valid price.");
-                return;
-              }
-              num--;
-              ch.send("Listed your "+poke[a.id].pokemon[num].name+ " for "+price.toString()+" credits.");
-              var market_id = market.id++;
-              market.server.push({
-                number: market_id,
-                dex_num: poke[a.id].pokemon[num].dex_num,
-                type: poke[a.id].pokemon[num].type,
-                name: poke[a.id].pokemon[num].name,
-                level: poke[a.id].pokemon[num].level,
-                xp: poke[a.id].pokemon[num].xp,
-                tiv: poke[a.id].pokemon[num].tiv,
-                price: price,
-                iv: poke[a.id].pokemon[num].iv,
-                seller: a.id
-              });
-              poke[a.id].pokemon.splice(num, 1);
-              for (var i=poke[a.id].pokemon.length-1; i>=num; i--) {
-                if (poke[a.id].pokemon[i] == null) return;
-                poke[a.id].pokemon[i].number -= 1;
-              }
-              fs.writeFile("./user-info/poke.json", JSON.stringify(poke, null, 4), err => {
-                  if (err) throw err;
-              });
-              fs.writeFile("./storage/market.json", JSON.stringify(market, null, 4), err => {
-                  if (err) throw err;
-              });
-            } else if (M[1]=="buy") {
-              var num = parseInt(M[2]);
-              if (isNaN(num)) {
-                ch.send("Please provide a num!");
-                return;
-              }
-              num--;
-              if (market.server[num]==null) {
-                ch.send("That pokémon is not on the market!");
-                return;
-              }
-
-              if (uinfo[a.id].credits < market.server[num].price) {
-                ch.send("You do not have enough credits to buy that!");
-                return;
-              }
-              uinfo[a.id].credits -= market.server[num].price;
-              uinfo[market.server[num].seller].credits += market.server[num].price;
-              poke[a.id].pokemon.push({
-                name: market.server[num].name,
-                number: poke[a.id].pokemon.length+1,
-                dex_num: market.server[num].dex_num,
-                type: market.server[num].type,
-                level: market.server[num].level,
-                xp: market.server[num].xp,
-                tiv: market.server[num].tiv,
-                iv: market.server[num].iv
-              });
-              ch.send("Successfully bought a "+market.server[num].name+ " for "+market.server[num].price.toString()+" credits.");
-              market.server[num] = null;
-              fs.writeFile("./storage/market.json", JSON.stringify(market, null, 4), err => {
-                  if (err) throw err;
-              });
-              fs.writeFile("./user-info/poke.json", JSON.stringify(poke, null, 4), err => {
-                  if (err) throw err;
-              });
-              fs.writeFile("./user-info/uinfo.json", JSON.stringify(uinfo, null, 4), err => {
-                  if (err) throw err;
-              });
-            } else if (M[1]=="info") {
-              var id = parseInt(M[2]);
-              id--;
-              if (market.server[id]==null) {
-                ch.send("That pokémon is not on the market!");
-                return;
-              }
-
-              const name = market.server[id].name;
-              var i = market.server[id].dex_num;
-              if (dex.special[dex.name[i]]!=null) {
-                image_url = dex.special[dex.name[i]];
-              } else {
-                image_url = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/' + dex.number[i] + '.png';
-              }
-              var hp_stat = ((market.server[id].iv[0] + 2 * dex.HP[i] + 25.5 + 100) * market.server[id].level) / 100 + 10;
-              var atk_stat = ((market.server[id].iv[1] + 2 * dex.Attack[i] + 25.5) * market.server[id].level) / 100 + 5;
-              var def_stat = ((market.server[id].iv[2] + 2 * dex.Defense[i] + 25.5) * market.server[id].level) / 100 + 5;
-              var spatk_stat = ((market.server[id].iv[3] + 2 * dex.SpAtk[i] + 25.5) * market.server[id].level) / 100 + 5;
-              var spdef_stat = ((market.server[id].iv[4] + 2 * dex.SpDef[i] + 25.5) * market.server[id].level) / 100 + 5;
-              var speed_stat = ((market.server[id].iv[5] + 2 * dex.Speed[i] + 25.5) * market.server[id].level) / 100 + 5;
-              const market_info_embed = new Discord.MessageEmbed()
-                  .setAuthor('Professor Oak', 'https://images-ext-2.discordapp.net/external/oMthNLlPT-Sjg-4nanyqxHDBH4iE7N8CVUh0WFjlxAc/https/i.imgur.com/8ZpM4tb.jpg')
-                  .setTitle('Level ' + market.server[id].level.toString() + ' ' + market.server[id].name+ ' – ID: '+market.server[id].number+' – Price: '+market.server[id].price)
-                  .setDescription(market.server[id].xp.toString() + '/' + levels[market.server[id].level].toString() + 'XP\n' +
-                      '**Types:** ' + processType(dex.Type[i]) + '\n' +
-                      '**HP:** ' + Math.round(hp_stat).toString() + ' - IV: ' + market.server[id].iv[0].toString() + '/31\n' +
-                      '**Attack:** ' + Math.round(atk_stat).toString() + ' - IV: ' + market.server[id].iv[1].toString() + '/31\n' +
-                      '**Defense:** ' + Math.round(def_stat).toString() + ' - IV: ' + market.server[id].iv[2].toString() + '/31\n' +
-                      '**Sp.Atk:** ' + Math.round(spatk_stat).toString() + ' - IV: ' + market.server[id].iv[3].toString() + '/31\n' +
-                      '**Sp.Def:** ' + Math.round(spdef_stat).toString() + ' - IV: ' + market.server[id].iv[4].toString() + '/31\n' +
-                      '**Speed:** ' + Math.round(speed_stat).toString() + ' - IV: ' + market.server[id].iv[5].toString() + '/31\n' +
-                      "**Total IV %:** " + market.server[id].tiv.toString() + "%")
-                  .setImage(image_url)
-                  .setFooter('Displaying Pokémon: ' + (id + 1).toString() + '/' + market.server.length.toString())
-              ch.send(market_info_embed);
-            }
             return;
 
 
