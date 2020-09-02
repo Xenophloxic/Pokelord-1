@@ -7,54 +7,87 @@ import json
 import time
 import math
 
-TOKEN = 'NzI5Mzk1NjE0MDkzMjc5MjMy.XwIUmQ.podkt-NR-ngLPnXlF53oTXrTyhQ'
+TOKEN = 'NzI5Mzk1NjE0MDkzMjc5MjMy.XwIUmQ.NE_NUPB3fngpdQ8PHgUXx7_vIaU'
 
 def get_prefix(client, message):
     with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
+        data = json.load(f)
+    if not str(message.channel.id) in data:
+        return commands.when_mentioned_or('p!')(client, message)
+    return commands.when_mentioned_or(data[str(message.guild.id)])(client, message)
 
-    return prefixes[str(message.guild.id)]
-
-client: Bot = commands.Bot(command_prefix= get_prefix)
-
+client: Bot = commands.Bot(command_prefix = get_prefix, case_insensitive=True, owner_id=393480172638044160)
 
 client.remove_command('help')
+
+# client = pymongo.MongoClient("mongodb+srv://xenophloxic:pokelord@pokemon.qlmd7.mongodb.net/<dbname>?retryWrites=true&w=majority")
+# db = client.test
 
 @client.event
 async def on_guild_join(guild):
     with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
+        data = json.load(f)
 
-    prefixes[str(guild.id)] = 'p!'
+    data[str(message.guild.id)] = 'p!'
 
     with open('prefixes.json', 'w') as f:
-        json.dump(prefixes, f, indent=4)
+        json.dump(data, f, indent=4)
+    channel = message.channel
+    guildjoin = discord.Embed()
+    guildjoin.set_author(name='Pokelord')
+    guildjoin.add_field(name='Hello!', value='Thank you for adding me to your server! I hope you have fun. Here is a list of my basic commands!')
+    guildjoin.add_field(name='Get started and more!', value='`p!help` - Help command \n `p!start` - Start command \n `p!server` - Join our offical server for more info!')
+    await channel.send(embed=guildjoin)
 
 @client.event
 async def on_guild_remove(guild):
     with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
+        data = json.load(f)
     
-    prefixes.pop(str(guild.id))
+    data.pop(str(guild.id))
 
     with open('prefixes.json', 'w') as f:
-        json.dump(prefixes, f, indent=4)
+        json.dump(data, f, indent=4)
 
 @client.command()
 @commands.guild_only()
-async def prefix(ctx, pre):
+async def prefix(self, ctx,*, pre = 'p!'):
     if ctx.message.author.guild_permissions.administrator:
         with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
+            data = json.load(f)
 
-        prefixes[str(ctx.guild.id)] = pre
+        data[str(ctx.guild.id)] = pre
         client.pre = pre
 
         with open('prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
+            json.dump(data, f, indent=4)
+    elif pre == None:
+        await ctx.send('(ping me to see my current prefix)')
     else:
         permission_error = str('Sorry you do not have permissions to do that!')
         await ctx.send(permission_error)
+
+@client.event
+async def on_message(message):
+    hello = True
+    if 'why' in message.content.lower():
+        embedwhy = discord.Embed()
+        embedwhy.set_author(name='Pokelord says:')
+        embedwhy.add_field(name='Wynaut?', value='lol')
+        embedwhy.set_image(
+            url='https://images-ext-2.discordapp.net/external/1zrKHQbqIOiB7t-st1cTp-InFQVbXONq5Rk3KaMy8A4/https/cdn.bulbagarden.net/upload/thumb/d/d0/360Wynaut.png/1200px-360Wynaut.png?width=677&height=677')
+        await message.channel.send(embed=embedwhy)
+    elif f"<@!729395614093279232>" in message.content:
+        with open('prefixes.json', 'r') as f:
+            data = json.load(f)
+        if str(message.guild.id) in data:
+            prefix = data[str(message.guild.id)]
+        else:
+            prefix = 'p!'
+        prefixMsg = await message.channel.send(f'My prefix is `{prefix}`!')
+    elif hello == True:
+        print(message)
+    await client.process_commands(message)
 
 @client.event
 async def on_ready():
@@ -62,16 +95,59 @@ async def on_ready():
     print('I am ready to go')
 
 @client.command()
-async def lol(ctx):
-    await ctx.send('lol')
+async def mongodb(ctx):
+    await ctx.send('Working on it, yay!')
 
 @client.command()
-async def LOL(ctx):
-    await ctx.send('lol')
+async def announce(ctx,*, say):
+    channel = client.get_guild(740761951159844944).get_channel(740761951214501973)
+    if ctx.message.author.id == 393480172638044160:
+        await channel.send(say)
+        await ctx.send('Announcing...')
+    elif ctx.message.author.id == 731930953446064230:
+        await channel.send(say)
+        await ctx.send('Announcing...')
+    elif ctx.message.author.id == 688863688064893015:
+        await channel.send(say)
+        await ctx.send('Announcing...')
+    else:
+        await ctx.send('You do not have the perms lol')
 
 @client.command()
-async def lmao(ctx):
-    await ctx.send('lmao')
+async def dongsend(ctx,*, send):
+    dong = client.get_guild(740761951159844944).get_member(731930953446064230)
+    if ctx.message.author.id == 393480172638044160:
+        await dong.send(send)
+        await ctx.send('Sent')
+    else:
+        await ctx.send('No perms, ur stupid')
+
+@client.command()
+async def ketansend(ctx, send):
+    ketan = client.get_guild(740761951159844944).get_member(688863688064893015)
+    if ctx.message.author.id == 393480172638044160:
+        await ketan.send(send)
+        await ctx.send('Sent')
+    else:
+        await ctx.send('No perms, ur stupid')
+
+@client.command()
+async def talk(ctx, server, chan, *, say):
+    server1 = int(server)
+    chan1 = int(chan)
+    channel = client.get_guild(server1).get_channel(chan1)
+    if ctx.message.author.id == 393480172638044160:
+        await channel.send(say)
+        await ctx.send('Sending...')
+    elif ctx.message.author.id == 731930953446064230:
+        await channel.send(say)
+        await ctx.send('Sending...')
+    elif ctx.message.author.id == 688863688064893015:
+        await channel.send(say)
+        await ctx.send('Sending...')
+    else:
+        await ctx.send('You do not have the perms, or I cannot chat there lol')
+
 
 @client.command(pass_context=True)
 async def spawn(ctx):
@@ -85,6 +161,8 @@ async def spawn(ctx):
     embedsp.set_image(url='https://images-ext-2.discordapp.net/external/FITLnpWWC78HNrRnjd9gcryVVdmKVrbhhVjgvTpbzro/https/cdn.bulbagarden.net/upload/7/76/HOME890E.png')
     await ctx.send(embed=embedsp)
     await author.send('Did you really think that would work? : P')
+
+
 
 @client.command()
 @commands.guild_only()
@@ -146,7 +224,6 @@ async def redeems(ctx):
     await ctx.send(f'It is redeem')
 
 @client.group(name='help', invoke_without_command=True)
-@commands.guild_only()
 async def help(ctx):
     author = ctx.message.author
 
@@ -172,7 +249,6 @@ async def help(ctx):
     await ctx.send('I sent you a DM with the help message!')
 
 @help.command(name='start')
-@commands.guild_only()
 async def start_subcommand(ctx):
     author = ctx.message.author
 
@@ -186,7 +262,6 @@ async def start_subcommand(ctx):
     await ctx.send('I sent you a DM with the help start message!')
 
 @help.command(name='catch')
-@commands.guild_only()
 async def catch_subcommand(ctx):
     author = ctx.message.author
 
@@ -200,7 +275,6 @@ async def catch_subcommand(ctx):
     await ctx.send('I sent you a DM with the help catch message!')
 
 @help.command(name='info')
-@commands.guild_only()
 async def info_subcommand(ctx):
     author = ctx.message.author
 
@@ -215,7 +289,6 @@ async def info_subcommand(ctx):
     await ctx.send('I sent you a DM with the help infoing message!')
 
 @help.command(name='poke')
-@commands.guild_only()
 async def poke_subcommand(ctx):
     author = ctx.message.author
 
@@ -230,7 +303,6 @@ async def poke_subcommand(ctx):
     await ctx.send('I sent you a DM with the help pokemon message!')
 
 @help.command(name='trade')
-@commands.guild_only()
 async def trade_subcommand(ctx):
     author = ctx.message.author
 
@@ -247,7 +319,6 @@ async def trade_subcommand(ctx):
     await ctx.send('I sent you a DM with the help trade message!')
 
 @help.command(name='market')
-@commands.guild_only()
 async def market_subcommand(ctx):
     author = ctx.message.author
 
@@ -261,7 +332,6 @@ async def market_subcommand(ctx):
     await ctx.send('I sent you a DM with the help market message!')
 
 @help.command(name='donate')
-@commands.guild_only()
 async def donate_subcommand(ctx):
     author = ctx.message.author
 
@@ -274,7 +344,6 @@ async def donate_subcommand(ctx):
     await ctx.send('I sent you a DM with the help donate message!')
 
 @help.command(name='redeem')
-@commands.guild_only()
 async def redeem_subcommand(ctx):
     author = ctx.message.author
 
@@ -289,7 +358,6 @@ async def redeem_subcommand(ctx):
     await ctx.send('I sent you a DM with the help redeem message!')
 
 @help.command(name='tutorial')
-@commands.guild_only()
 async def tutorial_subcommand(ctx):
     author = ctx.message.author
 
@@ -302,7 +370,6 @@ async def tutorial_subcommand(ctx):
     await ctx.send('I sent you a DM with the help tutorial message!')
 
 @help.command(name='shop')
-@commands.guild_only()
 async def shop_subcommand(ctx):
     author = ctx.message.author
 
@@ -315,7 +382,6 @@ async def shop_subcommand(ctx):
     await ctx.send('I sent you a DM with the help shop message!')
 
 @help.command(name='daily')
-@commands.guild_only()
 async def daily_subcommand(ctx):
     author = ctx.message.author
 
@@ -328,7 +394,6 @@ async def daily_subcommand(ctx):
     await ctx.send('I sent you a DM with the help daily message!')
 
 @help.command(name='extras')
-@commands.guild_only()
 async def extras_subcommand(ctx):
     author = ctx.message.author
 
@@ -346,7 +411,6 @@ async def extras_subcommand(ctx):
     await ctx.send('I sent you a DM with the help extras message!')
 
 @help.command(name='now')
-@commands.guild_only()
 async def now_subcommand(ctx):
     author = ctx.message.author
 
@@ -354,10 +418,24 @@ async def now_subcommand(ctx):
         color= discord.Colour.orange()
     )
     embed13.set_author(name=f'Is the bot down? Not working? use p!server and see if there is an outage')
-    embed13.add_field(name='Works for others?', value='DM a Developer and tell them your problem', inline=False)
-    embed13.add_field(name='Developers:', value='<@393480172638044160>\n <@731930953446064230>\n <@688863688064893015>')
+    embed13.add_field(name='Works for others?', value='Use p!help send (server invite and problem)', inline=False)
+    embed13.add_field(name='If you waste our time:', value='We can blacklist you')
     await author.send(embed=embed13)
     await ctx.send('I sent you a DM with the now message!')
+
+@help.command(name='send')
+async def send_subcommand(ctx,*, help):
+    help1 = help
+    author = ctx.message.author
+    helpchannel = client.get_guild(740761951159844944).get_channel(746580290511699998)
+    embedsendhelp = discord.Embed(
+        color= discord.Colour.red()
+    )
+    embedsendhelp.set_author(name=author)
+    embedsendhelp.set_thumbnail(url=ctx.message.author.avatar_url)
+    embedsendhelp.add_field(name=help1, value='឵឵ ')
+    await helpchannel.send(embed=embedsendhelp)
+    await ctx.send('Sent! Please be patient as our support gets to you.')
 
 @client.group(name='shop', invoke_without_command=True)
 async def shop(ctx):
