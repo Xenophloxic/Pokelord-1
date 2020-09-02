@@ -1,10 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const client2 = new Discord.Client();
 const fs = require('fs');
 
 
-var bot = require('./storage/bot.json');
 var prefix = require('./storage/prefix.json');
 var dex = require('./storage/dex.json');
 var spawn = require('./storage/spawns.json');
@@ -55,7 +53,7 @@ function processType(types) {
     return s;
 }
 
-client.login(bot.token);
+client.login('NzI5Mzk1NjE0MDkzMjc5MjMy.XwIUmQ.NE_NUPB3fngpdQ8PHgUXx7_vIaU');
 
 client.on('ready', () => {
   client.user.setActivity("PokeLord | p!help");
@@ -124,7 +122,7 @@ client.on('message', message => {
                     inline: true
                 }, {
                     name: ":books: Library: ",
-                    value: bot.library,
+                    value: client.library,
                     inline: true
                 }, {
                     name: ":notepad_spiral: Node",
