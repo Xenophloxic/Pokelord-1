@@ -17,9 +17,9 @@ def get_prefix(client, message):
 
 client: Bot = commands.Bot(command_prefix = get_prefix, case_insensitive=True, owner_id=393480172638044160)
 
-client.remove_command('help')
+bot.remove_command('help')
 
-# client = pymongo.MongoClient("mongodb+srv://xenophloxic:pokelord@pokemon.qlmd7.mongodb.net/<dbname>?retryWrites=true&w=majority")
+# bot = pymongo.MongoClient("mongodb+srv://xenophloxic:pokelord@pokemon.qlmd7.mongodb.net/<dbname>?retryWrites=true&w=majority")
 # db = client.test
 
 @client.event
