@@ -53,7 +53,7 @@ function processType(types) {
     return s;
 }
 
-client.login('NzI5Mzk1NjE0MDkzMjc5MjMy.XwIUmQ.NE_NUPB3fngpdQ8PHgUXx7_vIaU');
+client.login('TOKEN');
 
 client.on('ready', () => {
   client.user.setActivity("PokeLord | p!help");
