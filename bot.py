@@ -7,7 +7,6 @@ import json
 import time
 import math
 
-TOKEN = 'NzI5Mzk1NjE0MDkzMjc5MjMy.XwIUmQ.NE_NUPB3fngpdQ8PHgUXx7_vIaU'
 
 def get_prefix(client, message):
     with open('prefixes.json', 'r') as f:
